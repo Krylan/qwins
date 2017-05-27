@@ -1,4 +1,8 @@
-<?php require 'connect.php'; ?>
+<?php require 'connect.php';
+session_start();
+if($_GET['pass'] == 'admin'){ $_SESSION['admin'] = true; }
+if($_SESSION['admin'] != true){ header("Location: index.php"); }
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -9,6 +13,9 @@
 	<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap-grid.min.css" />
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 </head>
 <body>
 	<div id="menu-bar" class="container-fluid">
@@ -80,17 +87,20 @@
 			</div>
 			<div class="col-md-12">
 			<?php
-			$get_questions = $mysql->query("SELECT qwins_question.id, qwins_question.content, COUNT(qwins_answer.id) AS answer_counter FROM qwins_question LEFT JOIN qwins_answer ON qwins_question.id = qwins_answer.question_id WHERE qwins_question.category_id = $c_id
+			$get_questions = $mysql->query("SELECT qwins_question.id, qwins_question.content, SUM(qwins_answer.correct) AS correct, COUNT(qwins_answer.id) AS answer_counter FROM qwins_question LEFT JOIN qwins_answer ON qwins_question.id = qwins_answer.question_id WHERE qwins_question.category_id = $c_id 
 			GROUP BY qwins_question.id");
 			if($get_questions->num_rows > 0){
 				while($show_questions = $get_questions->fetch_object()){
+					if($show_questions->correct == 0){
+						$color = 'color:#F00;';
+					}else{ $color = ''; }
 					echo '<a href="manage_quiz.php?c_id='.$c_id.'&q_id='.$show_questions->id.'"><div class="box box-quiz">
 						<h4>'.$show_questions->content.'</h4>
-						<div class="question-counter">'.$show_questions->answer_counter.'<i class="material-icons">feedback</i></div>
+						<div class="question-counter" style="'.$color.'">'.$show_questions->answer_counter.'<i class="material-icons">feedback</i></div>
 					</div></a>';
 				}
 			}else{
-				header("Location: manage_quiz.php");
+				//header("Location: manage_quiz.php");
 			}
 			?>
 			</div>
@@ -127,7 +137,7 @@
 				<div id="add-answer" class="flat add-new background-icon" data-id="'.$show_question->id.'">Dodaj nową odpowiedź<i class="material-icons">add_circle</i></div>
 				</div>';
 			}else{
-				header("Location: manage_quiz.php");
+				//header("Location: manage_quiz.php");
 			}
 			?>
 			</div>

@@ -15,7 +15,7 @@ if($action == 'addQuestion'){
 	$c_id = (int)$_GET['c_id'];
 	$content = htmlspecialchars($_GET['content']);
 	
-	$check_category = $mysql->query("SELECT id qwins_category WHERE id=$c_id");
+	$check_category = $mysql->query("SELECT id FROM qwins_category WHERE id=$c_id");
 	if($check_category->num_rows > 0){
 		$add_question = $mysql->query("INSERT INTO qwins_question (id, category_id, content, difficulty) VALUES ('', $c_id, '$content', 0)");
 	}
@@ -31,8 +31,8 @@ if($action == 'editQuestion'){
 if($action == 'addAnswer'){
 	$q_id = (int)$_GET['id'];
 	
-	$check_question = $mysql->query("SELECT id qwins_question WHERE id=$q_id");
-	if($check_category->num_rows > 0){
+	$check_question = $mysql->query("SELECT id FROM qwins_question WHERE id=$q_id");
+	if($check_question->num_rows > 0){
 		$add_answer = $mysql->query("INSERT INTO qwins_answer (id, question_id, content, correct) VALUES ('', $q_id, '', 0)");
 		$new_id = $mysql->insert_id;
 		
