@@ -44,15 +44,20 @@
 			<div class="col-md-9" style="float:left;">
 				<h3>Kategorie quizów</h3>
 				<?php
-				$get_categories = $mysql->query("SELECT qwins_category.id, qwins_category.name, COUNT(qwins_question.id) AS question_counter 
+				$get_categories = $mysql->query("SELECT qwins_category.id, qwins_category.name, qwins_category.difficulty, COUNT(qwins_question.id) AS question_counter 
 				FROM qwins_category INNER JOIN qwins_question 
 				ON qwins_category.id = qwins_question.category_id 
 				GROUP BY qwins_category.id");
 				if($get_categories->num_rows > 0){
 					while($show_categories = $get_categories->fetch_object()){
 						if($show_categories->question_counter >= 20){
+							$difficulty = '';
+							if($show_categories->difficulty == 1){ $difficulty = '<span data-difficulty="1">Łatwy</span>'; }
+							if($show_categories->difficulty == 2){ $difficulty = '<span data-difficulty="2">Średnio zaawansowany</span>'; }
+							if($show_categories->difficulty == 3){ $difficulty = '<span data-difficulty="3">Trudny</span>'; }
 							echo '<label for="category_'.$show_categories->id.'" class="box box-quiz">
 								<h4>'.$show_categories->name.'</h4>
+								'.$difficulty.'
 								<div class="question-counter">'.$show_categories->question_counter.'<i class="material-icons">help</i></div>
 								<input type="checkbox" id="category_'.$show_categories->id.'" class="select_category" name="select_category_'.$show_categories->id.'" value="'.$show_categories->id.'" onchange="select_quiz('.$show_categories->id.')" /><label for="category_'.$show_categories->id.'"></label>
 							</label>';
@@ -143,28 +148,5 @@
 	<script src="initialize_firebase.js"></script>
 	<script src="datachannel.js"></script>
 	<script src="connect.js?time=<?=time()?>"></script>
-	<script>
-	function runTime(i_max, callback, color = '#6fdb6f'){
-		var time = 0;
-		var initialOffset = 0;
-		var i = i_max;
-
-		document.querySelector('.circle_animation').setAttribute('stroke', color);
-		
-		var interval = setInterval(function(){
-			document.querySelector('#question_timer').dataset.time = Math.ceil(i);
-			document.querySelector('.circle_animation').style.strokeDashoffset = 125-(125*(i/i_max));
-			if (i <= time){
-				document.querySelector('.circle_animation').style.strokeDashoffset = 125;
-				clearInterval(interval);
-				if (typeof callback === "function") {
-					callback();
-				}
-				return;
-			}
-			i -= 0.1;
-		}, 100);
-	}
-	</script>
 </body>
 </html>

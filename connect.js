@@ -1,24 +1,51 @@
 var channel = new DataChannel();
 
-channel.onopen = function(userid){
-	console.log('Channel is open');
-	if(role == 'host'){
-		var new_player = document.createElement("li");
-		new_player.setAttribute('data-player', userid);
-		new_player.innerHTML = '<i class="material-icons" data-uid="'+userid+'">smartphone</i> '+userid+'<i class="material-icons kick" style="float:right;" onclick="kick(\''+userid+'\');">block</i>';
-		document.getElementById("player-list").appendChild(new_player);
-		check_start();
-	}
-	if(role == 'player'){
-		channel.send({ dataType: 'changeDevice', playerId: channel.userid, content: device });
-	}
+function runTime(i_max, callback, color = '#6fdb6f'){
+	var time = 0;
+	var initialOffset = 0;
+	var i = i_max;
+
+	document.querySelector('.circle_animation').setAttribute('stroke', color);
+	
+	var interval = setInterval(function(){
+		document.querySelector('#question_timer').dataset.time = Math.ceil(i);
+		document.querySelector('.circle_animation').style.strokeDashoffset = 125-(125*(i/i_max));
+		if (i <= time){
+			document.querySelector('.circle_animation').style.strokeDashoffset = 125;
+			clearInterval(interval);
+			if (typeof callback === "function") {
+				callback();
+			}
+			return;
+		}
+		i -= 0.1;
+	}, 100);
 }
 
+function blockAnswering(){
+	document.querySelectorAll('.answer').forEach(function(element){
+		element.classList.add('disabled');
+	});
+}
+
+channel.onopen = function(userid){
+	if(role === 'host'){
+		var newPlayer = document.createElement("li");
+		newPlayer.setAttribute('data-player', userid);
+		newPlayer.innerHTML = '<i class="material-icons" data-uid="'+userid+'">smartphone</i> '+userid+'<i class="material-icons kick" style="float:right;" onclick="kick(\''+userid+'\');">block</i>';
+		document.getElementById("player-list").appendChild(newPlayer);
+		check_start();
+	}
+	if(role === 'player'){
+		channel.send({ dataType: 'changeDevice', playerId: channel.userid, content: device });
+	}
+};
+
 channel.onmessage = function(data, userid){
-	if(role == 'player'){
+	if(role === 'player'){
 		if(data.dataType == 'requestQuestion'){
 			document.body.classList.add('overflow');
-			question = JSON.parse(data.content);
+			var question = JSON.parse(data.content);
 			document.querySelector("#question_counter").dataset.count = data.questionCount;
 			insertQuestion(question);
 			runTime(10, blockAnswering);
@@ -62,24 +89,18 @@ channel.onmessage = function(data, userid){
 };
 
 channel.onleave = function(userid){
-	if(role == 'host'){
+	if(role === 'host'){
 		document.querySelector('[data-player="'+userid+'"]').remove();
 		channel.eject(userid);
 		check_start();
 	}
-	if(role == 'player' && userid.includes('host-')){
+	if(role === 'player' && userid.includes('host-')){
 		window.location.replace('index.php');
 	}
 };
 
 channel.onclose = function(event) {
 };
-
-function blockAnswering(){
-	document.querySelectorAll('.answer').forEach(function(element){
-		element.classList.add('disabled');
-	});
-}
 
 function insertQuestion(data){
 	document.querySelectorAll("#question_box .answer").forEach(function(element){
@@ -124,24 +145,24 @@ function insertQuestion(data){
 }
 
 function kick(userid){
-	if(role == 'host'){
+	if(role === 'host'){
 		channel.eject(userid);
 		channel.send({ dataType: 'kickPlayer', content: userid });
 		check_start();
 	}
 }
 
-if(role == 'host'){
+if(role === 'host'){
 	channel.userid = nick;
 	channel.open(game_id);
 	var playerList = [];
 	var question_count = 10;
 	var solo_mode = false;
 	
-	var new_player = document.createElement("li");
-	new_player.setAttribute('data-player', channel.userid);
-	new_player.innerHTML = '<i class="material-icons">'+device+'</i> '+channel.userid;
-	document.getElementById("player-list").appendChild(new_player);
+	var newPlayer = document.createElement("li");
+	newPlayer.setAttribute('data-player', channel.userid);
+	newPlayer.innerHTML = '<i class="material-icons">'+device+'</i> '+channel.userid;
+	document.getElementById("player-list").appendChild(newPlayer);
 	
 	document.querySelector('#setting-solo-mode').addEventListener('change', function(){
 		if(this.checked){ solo_mode = true; }
@@ -149,7 +170,7 @@ if(role == 'host'){
 		check_start();
 	});
 }
-if(role == 'player'){
+if(role === 'player'){
 	channel.userid = nick;
 	
 	firebase.database().ref(game_id).once('value', function (data) {
@@ -217,7 +238,7 @@ function endGame(){
 function showScoreTable(){
 	document.querySelector('#question_timer').classList.add('score-table');
 	document.querySelector('#score-table').classList.remove('hidden');
-	if(role == 'host'){
+	if(role === 'host'){
 		var paraArr = [].slice.call(document.querySelectorAll("#player-score-list li")).sort(function(elementA, elementB){
 			if(parseInt(elementA.querySelector('span').innerHTML) > parseInt(elementB.querySelector('span').innerHTML)){
 				return -1;
@@ -239,7 +260,7 @@ function showScoreTable(){
 			channel.send({ dataType: 'sendScoreTable', content: score_table });
 		}
 	}
-	if(role == 'player'){
+	if(role === 'player'){
 		runTime(5, function(){
 			document.querySelector('#question_timer').classList.remove('score-table');
 			document.querySelector('#score-table').classList.add('hidden');

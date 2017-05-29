@@ -46,9 +46,9 @@ if($_SESSION['admin'] != true){ header("Location: index.php"); }
 				}
 				if($q_id > 0){
 					$view = 'answer';
-					$get_question_content = $mysql->query("SELECT content FROM qwins_question WHERE id = $q_id");
-					$show_question_content = $get_question_content->fetch_object();
-					$breadcrumbs .= '<i class="material-icons">chevron_right</i><a href="#" data-label="Pytanie">'.$show_question_content->content.'</a>';
+					$get_q_content = $mysql->query("SELECT content FROM qwins_question WHERE id = $q_id");
+					$show_q_content = $get_q_content->fetch_object();
+					$breadcrumbs .= '<i class="material-icons">chevron_right</i><a href="#" data-label="Pytanie">'.$show_q_content->content.'</a>';
 				}
 				$breadcrumbs .= '</div>';
 			}
@@ -63,15 +63,19 @@ if($_SESSION['admin'] != true){ header("Location: index.php"); }
 			</div>
 			<div class="col-md-12">
 			<?php
-			$get_categories = $mysql->query("SELECT qwins_category.id, qwins_category.name, COUNT(qwins_question.id) AS question_counter 
+			$get_categories = $mysql->query("SELECT qwins_category.id, qwins_category.name, qwins_category.difficulty, COUNT(qwins_question.id) AS question_counter 
 			FROM qwins_category LEFT JOIN qwins_question 
 			ON qwins_category.id = qwins_question.category_id
 			GROUP BY qwins_category.id");
 			if($get_categories->num_rows > 0){
 				while($show_categories = $get_categories->fetch_object()){
+					$difficulty = '';
+					if($show_categories->difficulty == 1){ $difficulty = '<span data-difficulty="1">Łatwy</span>'; }
+					if($show_categories->difficulty == 2){ $difficulty = '<span data-difficulty="2">Średnio zaawansowany</span>'; }
+					if($show_categories->difficulty == 3){ $difficulty = '<span data-difficulty="3">Trudny</span>'; }
 					echo '<a href="manage_quiz.php?c_id='.$show_categories->id.'"><div class="box box-quiz">
 						<h4>'.$show_categories->name.'</h4>
-						<span>Łatwy</span>
+						'.$difficulty.'
 						<div class="question-counter">'.$show_categories->question_counter.'<i class="material-icons">help</i></div>
 					</div></a>';
 				}

@@ -17,7 +17,7 @@ if($action == 'addQuestion'){
 	
 	$check_category = $mysql->query("SELECT id FROM qwins_category WHERE id=$c_id");
 	if($check_category->num_rows > 0){
-		$add_question = $mysql->query("INSERT INTO qwins_question (id, category_id, content, difficulty) VALUES ('', $c_id, '$content', 0)");
+		$add_question = $mysql->query("INSERT INTO qwins_question (id, category_id, content) VALUES ('', $c_id, '$content')");
 	}
 }
 // Edycja pytania
