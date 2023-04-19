@@ -8,11 +8,10 @@ Aby uruchomić grę na swoim serwerze, potrzebujemy serwera z zainstalowanym PHP
 
 ## Demo
 
-Oficjalną wersję możecie znaleźć pod tym adresem: http://krylan.ovh/qwins/
+Oficjalną wersję możecie znaleźć pod tym adresem: https://krylan.ovh/qwins/
 
 ## Pomoc
 
-W razie pytań, błędów czy sugestii, zapraszam do kontaktu ze mną poprzez formularz: http://krylan.ovh/portfolio/contact/
-Lub poprzez tę stronę GitHub.
+W razie pytań, błędów czy sugestii, zapraszam do kontaktu ze mną poprzez formularz: https://krylan.ovh/portfolio/contact/ lub poprzez tę stronę GitHub.
 
 Życzę udanej rozgrywki i świetnej zabawy!
