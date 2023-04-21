@@ -1,21 +1,37 @@
-<?php require 'connect.php'; ?>
+<?php
+require 'connect.php';
+$game_id = rand(1000, 9999);
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
 	<meta charset="utf-8" />
 	<title>Qwins!</title>
-	
-	<link rel="stylesheet" href="style.css?time=<?=time()?>" />
-	<link href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="css/style.css?time=<?=time()?>" />
+	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	
+
 	<link rel='shortcut icon' href='img/icon-512.png' type='image/x-icon' />
-	
+
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
+
 	<meta name="theme-color" content="#03A9F4">
 	<link rel="manifest" href="manifest.json" />
+<script>
+function share(){
+	if (navigator.share) {
+	  navigator.share({
+		  title: 'Zaproszenie do gry w Qwins!',
+		  text: 'Zobaczmy, kto będzie lepszy w quizowym wyzwaniu!',
+		  url: '<?='https://'.$_SERVER['HTTP_HOST'].str_replace('lobby.php', '', $_SERVER['REQUEST_URI']).'?game='.$game_id;?>',
+	  })
+		.then(() => console.log('Successful share'))
+		.catch((error) => console.log('Error sharing', error));
+	}
+}
+</script>
 </head>
 <body>
 	<?php
@@ -34,7 +50,6 @@
 			</div>
 			<?php
 			$vertical_padding = 'class="padding-vertical-2x"';
-			$game_id = rand(1000, 9999);
 			echo '<div id="game-id">ID gry:<br /><b>'.$game_id.'</b></div>';
 			?>
 		</div>
@@ -44,7 +59,7 @@
 			<div class="col-md-9" style="float:left;">
 				<h3>Kategorie quizów</h3>
 				<?php
-				$get_categories = $mysql->query("SELECT qwins_category.id, qwins_category.name, qwins_category.difficulty, COUNT(qwins_question.id) AS question_counter 
+				$get_categories = $mysql->query("SELECT qwins_category.id, qwins_category.name, qwins_category.difficulty, COUNT(qwins_question.id) AS question_counter, qwins_category.language 
 				FROM qwins_category INNER JOIN qwins_question 
 				ON qwins_category.id = qwins_question.category_id 
 				GROUP BY qwins_category.id");
@@ -55,9 +70,13 @@
 							if($show_categories->difficulty == 1){ $difficulty = '<span data-difficulty="1">Łatwy</span>'; }
 							if($show_categories->difficulty == 2){ $difficulty = '<span data-difficulty="2">Średnio zaawansowany</span>'; }
 							if($show_categories->difficulty == 3){ $difficulty = '<span data-difficulty="3">Trudny</span>'; }
+
+							if($show_categories->language == 0){ $language = '<span data-type="lang">PL</span>'; }
+							if($show_categories->language == 1){ $language = '<span data-type="lang">EN</span>'; }
+
 							echo '<label for="category_'.$show_categories->id.'" class="box box-quiz">
 								<h4>'.$show_categories->name.'</h4>
-								'.$difficulty.'
+								'.$language.$difficulty.'
 								<div class="question-counter">'.$show_categories->question_counter.'<i class="material-icons">help</i></div>
 								<input type="checkbox" id="category_'.$show_categories->id.'" class="select_category" name="select_category_'.$show_categories->id.'" value="'.$show_categories->id.'" onchange="select_quiz('.$show_categories->id.')" /><label for="category_'.$show_categories->id.'"></label>
 							</label>';
@@ -73,6 +92,10 @@
 				<h3>Ustawienia gry</h3><br />
 				<div class="form_input"><input id="setting-question-cnt" type="number" min="3" max="20" step="1" value="10" /><label>Ilość pytań</label></div>
 				<input id="setting-solo-mode" class="material_checkbox" type="checkbox" /><label for="setting-solo-mode">Tryb solo</label>
+				<br /><br />
+				<span class="button-share" onclick="share()">Udostępnij</span>
+				<br style="clear:both;" /><br />
+				<br /><br />
 			</div>
 		</div>
 	</div>
@@ -95,7 +118,7 @@
 			</div>
 		</div>
 	<?php endif; ?>
-	
+
 	<div id="quiz_game_container" class="shadow-overlay hidden">
 		<div <?=$vertical_padding?>>
 			<div id="question_box" class="box col-md-9">
@@ -121,7 +144,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<?php
 	if(isset($_POST['connect'])){ echo '</div>'; }
 	if(isset($_POST['host'])){
@@ -138,15 +161,16 @@
 		const game_id = 'game-<?=$game_id?>';
 		const role = '<?=$role?>';
 		const nick = '<?=$nick?>';
-		
-		var selected_quiz = [];
-		var shown_questions = [];
-		
-		if(typeof window.orientation !== 'undefined'){ var device = 'smartphone'; }else{ var device = 'desktop_windows'; }
+
+		let selected_quiz = [];
+		let shown_questions = [];
+		let device = 'desktop_windows';
+
+		if(typeof window.orientation !== 'undefined'){ device = 'smartphone'; }
 	</script>
 	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
-	<script src="initialize_firebase.js"></script>
-	<script src="datachannel.js"></script>
-	<script src="connect.js?time=<?=time()?>"></script>
+	<script src="js/initialize_firebase.js"></script>
+	<script src="js/datachannel.js"></script>
+	<script src="js/connect.js?time=<?=time()?>"></script>
 </body>
 </html>

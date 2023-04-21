@@ -1,16 +1,15 @@
 var channel = new DataChannel();
 
-function runTime(i_max, callback, color = '#6fdb6f'){
-	var time = 0;
+function runTime(targetTime, callback, color = '#6fdb6f'){
 	var initialOffset = 0;
-	var i = i_max;
+	var time = targetTime;
 
 	document.querySelector('.circle_animation').setAttribute('stroke', color);
 	
 	var interval = setInterval(function(){
-		document.querySelector('#question_timer').dataset.time = Math.ceil(i);
-		document.querySelector('.circle_animation').style.strokeDashoffset = 125-(125*(i/i_max));
-		if (i <= time){
+		document.querySelector('#question_timer').dataset.time = Math.ceil(time);
+		document.querySelector('.circle_animation').style.strokeDashoffset = 125-(125*(time/targetTime));
+		if (time <= 0){
 			document.querySelector('.circle_animation').style.strokeDashoffset = 125;
 			clearInterval(interval);
 			if (typeof callback === "function") {
@@ -18,7 +17,7 @@ function runTime(i_max, callback, color = '#6fdb6f'){
 			}
 			return;
 		}
-		i -= 0.1;
+		time -= 0.1;
 	}, 100);
 }
 
@@ -102,27 +101,34 @@ channel.onleave = function(userid){
 channel.onclose = function(event) {
 };
 
+function htmlDecode(input){
+  var e = document.createElement('div');
+  e.innerHTML = input;
+  return e.childNodes[0].nodeValue;
+}
+
 function insertQuestion(data){
 	document.querySelectorAll("#question_box .answer").forEach(function(element){
 		element.classList.remove('correct');
 		element.classList.remove('hide');
 	});
-	document.querySelector('#question_text').innerHTML = data.question_content;
+	document.querySelector('#question_text').innerHTML = htmlDecode(data.question_content);
 	document.querySelector('#question_text').dataset.category = data.category_name;
 	if(data[0].correct == 1){ document.querySelector('#answer1_text').classList.add('correct'); }
 	if(data[1].correct == 1){ document.querySelector('#answer2_text').classList.add('correct'); }
 	if(data[2].correct == 1){ document.querySelector('#answer3_text').classList.add('correct'); }
 	if(data[3].correct == 1){ document.querySelector('#answer4_text').classList.add('correct'); }
-	document.querySelector('#answer1_text div').innerHTML = data[0].content;
-	document.querySelector('#answer2_text div').innerHTML = data[1].content;
-	document.querySelector('#answer3_text div').innerHTML = data[2].content;
-	document.querySelector('#answer4_text div').innerHTML = data[3].content;
+	document.querySelector('#answer1_text div').innerHTML = htmlDecode(data[0].content);
+	document.querySelector('#answer2_text div').innerHTML = htmlDecode(data[1].content);
+	document.querySelector('#answer3_text div').innerHTML = htmlDecode(data[2].content);
+	document.querySelector('#answer4_text div').innerHTML = htmlDecode(data[3].content);
 	document.querySelector('#quiz_game_container').classList.remove('hidden');
 	document.querySelectorAll('.answer').forEach(function(element){
 		element.classList.remove('disabled');
 		element.classList.remove('selected');
 		element.addEventListener('click', function(){
 			if(!this.classList.contains('disabled') && role == 'host'){
+				//document.querySelector('#audio-select').play();
 				this.classList.add('selected');
 				blockAnswering();
 				if(document.querySelector('.answer.correct').dataset.answer == this.dataset.answer){

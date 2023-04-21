@@ -163,6 +163,17 @@ bottom:-15px;
 transform: rotate(20deg);
 }
 
+.copy-question{
+	cursor:pointer;
+}
+
+/* ----- LABELS COLORS ----- */
+span[data-difficulty="1"]{ background-color:#4CAF50; }
+span[data-difficulty="2"]{ background-color:#FF9800; }
+span[data-difficulty="3"]{ background-color:#F44336; }
+
+span[data-type="lang"]{ background-color:#03A9F4; }
+
 /* CORRECT ANSWER INPUT */
 input[type=radio] ~ label:before,
 input[type=checkbox] ~ label:before {

@@ -1,6 +1,6 @@
 <?php require 'connect.php';
 session_start();
-if($_GET['pass'] == 'admin'){ $_SESSION['admin'] = true; }
+if(isset($_GET['pass']) && $_GET['pass'] == 'admin'){ $_SESSION['admin'] = true; }
 if($_SESSION['admin'] != true){ header("Location: index.php"); }
 ?>
 <!DOCTYPE html>
@@ -8,12 +8,12 @@ if($_SESSION['admin'] != true){ header("Location: index.php"); }
 <head>
 	<meta charset="utf-8" />
 	<title>Qwins! Manager</title>
-	
-	<link rel="stylesheet" href="style_manager.css" />
-	<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap-grid.min.css" />
+
+	<link rel="stylesheet" href="css/style_manager.css" />
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	
+
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>
@@ -28,10 +28,10 @@ if($_SESSION['admin'] != true){ header("Location: index.php"); }
 		<div class="row">
 			<div class="col-md-9">
 			<?php 
-			$c_id = (int)$_GET['c_id']; // CATEGORY ID
-			$q_id = (int)$_GET['q_id']; // QUESTION ID
+			$c_id = isset($_GET['c_id']) ? (int)$_GET['c_id'] : 0; // CATEGORY ID
+			$q_id = isset($_GET['q_id']) ? (int)$_GET['q_id'] : 0; // QUESTION ID
 			$view = 'category'; // Nazwa widoku
-			
+
 			// Tworzymy ścieżkę, po której można nawigować
 			function make_breadcrumbs(){
 				global $breadcrumbs;
@@ -53,7 +53,7 @@ if($_SESSION['admin'] != true){ header("Location: index.php"); }
 				$breadcrumbs .= '</div>';
 			}
 			make_breadcrumbs();
-			
+
 			// Jeśli nie wybraliśmy kategorii ani pytania, to znajdujemy się w widoku kategorii
 			if($c_id <= 0 && $q_id <= 0):
 			?>
@@ -98,6 +98,7 @@ if($_SESSION['admin'] != true){ header("Location: index.php"); }
 					if($show_questions->correct == 0){
 						$color = 'color:#F00;';
 					}else{ $color = ''; }
+					echo '<span class="copy-question" data-qid="'.$show_questions->id.'"><i class="material-icons" title="Kopiuj">content_copy</i></span>';
 					echo '<a href="manage_quiz.php?c_id='.$c_id.'&q_id='.$show_questions->id.'"><div class="box box-quiz">
 						<h4>'.$show_questions->content.'</h4>
 						<div class="question-counter" style="'.$color.'">'.$show_questions->answer_counter.'<i class="material-icons">feedback</i></div>
@@ -241,6 +242,7 @@ if(view == 'category'){
 
 /* W widoku pytań możemy:
 	- Dodać pytanie
+	– Skopiować pytanie
 */
 if(view == 'question'){
 	document.querySelector('#add-question').onclick = function(){ 
@@ -253,6 +255,23 @@ if(view == 'question'){
 			});
 		} 
 	};
+
+	var copyLink = document.querySelectorAll('.copy-question');
+	for (var i = 0; i < copyLink.length; i++) {
+		copyLink[i].addEventListener('click', function(event) {
+			this.onclick = function(){
+			var content = prompt("Wpisz treść pytania", "");
+			var c_id = document.querySelector('#breadcrumbs').dataset.cid;
+			var q_id = this.dataset.qid;
+
+			if (content != null) {
+				ajaxRequest('copyQuestion', content, c_id, q_id, 0).then((data) => {
+					window.location.reload(true);
+				});
+			}
+		};
+		});
+	}
 }
 </script>
 </body>

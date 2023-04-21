@@ -312,7 +312,7 @@ input[type=checkbox].material_checkbox ~ label:before{
 	left:0;right:0;
 	top:0;bottom:0;
 	z-index: -1;
-	background-image:url('img/bg-triangle2.png');
+	background-image:url('../img/bg-triangle2.png');
 	background-repeat:repeat;
 	-webkit-animation: 20s linear 0s normal none infinite animate2;
 	-moz-animation: 20s linear 0s normal none infinite animate2;
@@ -325,7 +325,7 @@ input[type=checkbox].material_checkbox ~ label:before{
 	left:0;right:0;
 	top:0;bottom:0;
 	z-index: -1;
-	background-image:url('img/bg-triangle.png');
+	background-image:url('../img/bg-triangle.png');
 	background-repeat:repeat;
 	-webkit-animation: 17s linear 0s normal none infinite animate;
 	-moz-animation: 17s linear 0s normal none infinite animate;
@@ -548,7 +548,7 @@ transition:top 0.5s;
 	content: '';
     width: 30px;
     height: 75px;
-    background-image: url(img/medal/flat_medal4.png);
+    background-image: url(../img/medal/flat_medal4.png);
     background-repeat: no-repeat;
     position: absolute;
     left: 45px;
@@ -559,7 +559,7 @@ transition:top 0.5s;
 	content: '';
     width: 30px;
     height: 75px;
-    background-image: url(img/medal/flat_medal3.png);
+    background-image: url(../img/medal/flat_medal3.png);
     background-repeat: no-repeat;
     position: absolute;
     left: 45px;
@@ -570,7 +570,7 @@ transition:top 0.5s;
 	content: '';
     width: 30px;
     height: 75px;
-    background-image: url(img/medal/flat_medal2.png);
+    background-image: url(../img/medal/flat_medal2.png);
     background-repeat: no-repeat;
     position: absolute;
     left: 45px;
@@ -604,10 +604,6 @@ transition:top 0.5s;
 		padding: 10px 40px;
 		font-size: 14px;
 	}
-	
-}
-
-@media screen and (max-width: 992px) {
 	.overflow{
 		overflow:hidden;
 	}
@@ -623,11 +619,19 @@ transition:top 0.5s;
 		font-size:12px;
 		font-weight:normal;
 	}
+	#quiz_game_container > div{
+		padding:0;
+	}
 }
 /* ----- LABELS COLORS ----- */
+span[data-difficulty="1"] i, span[data-difficulty="2"] i, span[data-difficulty="3"] i
+{ font-size:10px;vertical-align:baseline;margin:0px; }
+
 span[data-difficulty="1"]{ background-color:#4CAF50; }
 span[data-difficulty="2"]{ background-color:#FF9800; }
 span[data-difficulty="3"]{ background-color:#F44336; }
+
+span[data-type="lang"]{ background-color:#03A9F4; }
 
 /* ----- BUG REPORT ----- */
 .report_bug{
@@ -649,4 +653,17 @@ span[data-difficulty="3"]{ background-color:#F44336; }
 	vertical-align:sub;
 	font-size:24px;
 	margin:0px;
+}
+
+.button-share{
+	cursor: pointer;
+	padding: 10px 25px;
+	border-radius: 4px;
+	background-color: #03A9F4;
+	color: #FFF;
+	transition: background-color 0.2s;
+}
+
+.button-share:hover{
+	background-color: #0175a9;
 }
