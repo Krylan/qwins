@@ -168,7 +168,7 @@ function share(){
 
 		if(typeof window.orientation !== 'undefined'){ device = 'smartphone'; }
 	</script>
-	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js" integrity="sha384-ljiddGbiDjiJwWcj0TZcD73bb9+8croWbrAjdLZ3KZxWLk+6sflC9wbmjXx/uWyR" crossorigin="anonymous"></script>
 	<script src="js/initialize_firebase.js"></script>
 	<script src="js/datachannel.js"></script>
 	<script src="js/connect.js?time=<?=time()?>"></script>

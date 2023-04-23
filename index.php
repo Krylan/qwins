@@ -56,7 +56,7 @@
 				</div>
 
 				<div class="report_bug col-md-4">
-				<a href="https://krylan.ovh/portfolio/contact/" target="_blank"><i class="material-icons">bug_report</i> Zgłoś błąd</a>
+				<a href="https://krylan.ovh/portfolio/contact/" target="_blank" rel="noopener"><i class="material-icons">bug_report</i> Zgłoś błąd</a>
 				</div>
 			</div>
 		</div>
