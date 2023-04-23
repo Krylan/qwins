@@ -430,7 +430,6 @@ pointer-events:none;
 	content: attr(data-category);
     position: absolute;
     margin-top: -25px;
-    left: 25px;
     font-size: 11px;
     color: #FFF;
     border-radius: 12px;

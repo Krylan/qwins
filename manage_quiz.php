@@ -1,4 +1,4 @@
-<?php require 'connect.php';
+<?php require_once 'connect.php';
 session_start();
 if(isset($_GET['pass']) && $_GET['pass'] == 'admin'){ $_SESSION['admin'] = true; }
 if($_SESSION['admin'] != true){ header("Location: index.php"); }

@@ -1,5 +1,5 @@
 <?php
-require 'connect.php';
+require_once 'connect.php';
 $game_id = rand(1000, 9999);
 ?>
 <!DOCTYPE html>

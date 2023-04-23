@@ -1,5 +1,5 @@
 <?php
-require '../connect.php';
+require_once '../connect.php';
 session_start();
 
 $action = $_GET['action'];
