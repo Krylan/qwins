@@ -1,12 +1,11 @@
-var channel = new DataChannel();
+let channel = new DataChannel();
 
 function runTime(targetTime, callback, color = '#6fdb6f'){
-	var initialOffset = 0;
-	var time = targetTime;
+	let time = targetTime;
 
 	document.querySelector('.circle_animation').setAttribute('stroke', color);
 	
-	var interval = setInterval(function(){
+	let interval = setInterval(function(){
 		document.querySelector('#question_timer').dataset.time = Math.ceil(time);
 		document.querySelector('.circle_animation').style.strokeDashoffset = 125-(125*(time/targetTime));
 		if (time <= 0){
@@ -29,7 +28,7 @@ function blockAnswering(){
 
 channel.onopen = function(userid){
 	if(role === 'host'){
-		var newPlayer = document.createElement("li");
+		let newPlayer = document.createElement("li");
 		newPlayer.setAttribute('data-player', userid);
 		newPlayer.innerHTML = '<i class="material-icons" data-uid="'+userid+'">smartphone</i> '+userid+'<i class="material-icons kick" style="float:right;" onclick="kick(\''+userid+'\');">block</i>';
 		document.getElementById("player-list").appendChild(newPlayer);
@@ -44,7 +43,7 @@ channel.onmessage = function(data, userid){
 	if(role === 'player'){
 		if(data.dataType == 'requestQuestion'){
 			document.body.classList.add('overflow');
-			var question = JSON.parse(data.content);
+			let question = JSON.parse(data.content);
 			document.querySelector("#question_counter").dataset.count = data.questionCount;
 			insertQuestion(question);
 			runTime(10, blockAnswering);
@@ -72,7 +71,7 @@ channel.onmessage = function(data, userid){
 	if(role == 'host'){
 		if(data.dataType == 'selectAnswer'){
 			if(document.querySelector('.answer.correct').dataset.answer == data.content){
-				var timeLeft = document.querySelector('#question_timer').dataset.time;
+				let timeLeft = document.querySelector('#question_timer').dataset.time;
 				playerList[data.playerId] += timeLeft*10;
 				document.querySelectorAll("#player-score-list li").forEach(function(element){
 					if(element.dataset.player == data.playerId){
@@ -102,7 +101,7 @@ channel.onclose = function(event) {
 };
 
 function htmlDecode(input){
-  var e = document.createElement('div');
+  let e = document.createElement('div');
   e.innerHTML = input;
   return e.childNodes[0].nodeValue;
 }
@@ -132,7 +131,7 @@ function insertQuestion(data){
 				this.classList.add('selected');
 				blockAnswering();
 				if(document.querySelector('.answer.correct').dataset.answer == this.dataset.answer){
-					var timeLeft = document.querySelector('#question_timer').dataset.time;
+					let timeLeft = document.querySelector('#question_timer').dataset.time;
 					playerList[channel.userid] += timeLeft*10;
 					document.querySelectorAll("#player-score-list li").forEach(function(element){
 						if(element.dataset.player == channel.userid){
@@ -158,14 +157,15 @@ function kick(userid){
 	}
 }
 
+let playerList = [];
+let question_count = 10;
+let solo_mode = false;
+
 if(role === 'host'){
 	channel.userid = nick;
 	channel.open(game_id);
-	var playerList = [];
-	var question_count = 10;
-	var solo_mode = false;
 	
-	var newPlayer = document.createElement("li");
+	let newPlayer = document.createElement("li");
 	newPlayer.setAttribute('data-player', channel.userid);
 	newPlayer.innerHTML = '<i class="material-icons">'+device+'</i> '+channel.userid;
 	document.getElementById("player-list").appendChild(newPlayer);
@@ -180,7 +180,7 @@ if(role === 'player'){
 	channel.userid = nick;
 	
 	firebase.database().ref(game_id).once('value', function (data) {
-		var isChannelPresent = data.val() != null;
+		let isChannelPresent = data.val() != null;
 		if (!isChannelPresent) {
 			window.location.replace('index.php');
 		} else {
@@ -190,8 +190,8 @@ if(role === 'player'){
 }
 
 function check_start(){
-	var player_count = document.getElementById("player-list").getElementsByTagName("li").length;
-	var setting_question_cnt = parseInt(document.querySelector('#setting-question-cnt').value);
+	let player_count = document.getElementById("player-list").getElementsByTagName("li").length;
+	let setting_question_cnt = parseInt(document.querySelector('#setting-question-cnt').value);
 	if(((player_count >= 2 && solo_mode == false) || (player_count == 1 && solo_mode == true)) && selected_quiz.length > 0 && setting_question_cnt >= 3 && setting_question_cnt <= 25){
 		document.querySelector('.start-game').classList.remove('disabled');
 		return true;
@@ -245,7 +245,7 @@ function showScoreTable(){
 	document.querySelector('#question_timer').classList.add('score-table');
 	document.querySelector('#score-table').classList.remove('hidden');
 	if(role === 'host'){
-		var paraArr = [].slice.call(document.querySelectorAll("#player-score-list li")).sort(function(elementA, elementB){
+		let paraArr = [].slice.call(document.querySelectorAll("#player-score-list li")).sort(function(elementA, elementB){
 			if(parseInt(elementA.querySelector('span').innerHTML) > parseInt(elementB.querySelector('span').innerHTML)){
 				return -1;
 			}
@@ -257,7 +257,7 @@ function showScoreTable(){
 		paraArr.forEach(function (p) {
 			document.querySelector("#player-score-list").appendChild(p);
 		});
-		var score_table = document.querySelector('#player-score-list').innerHTML;
+		let score_table = document.querySelector('#player-score-list').innerHTML;
 		if(shown_questions.length == question_count){
 			endGame();
 			channel.send({ dataType: 'sendScoreTableEnd', content: score_table });
@@ -281,13 +281,13 @@ function ajaxRequest(){
 	req.setRequestHeader("Content-type", "application/json");
     req.onload = () => req.status === 200 ? resolve(req.response) : reject(Error(req.statusText));
     req.onerror = (e) => reject(Error(`Network Error: ${e}`));
-    var data = JSON.stringify({"action":"requestQuestion","category_array":selected_quiz,"shown_questions": shown_questions});
+    let data = JSON.stringify({"action":"requestQuestion","category_array":selected_quiz,"shown_questions": shown_questions});
 	req.send(data);
 	req.addEventListener("readystatechange", function () {
 	  if(this.readyState === 4){
 		document.querySelector('#question_timer').classList.remove('score-table');
 		document.querySelector('#score-table').classList.add('hidden');
-		var data = JSON.parse(this.responseText);
+		let data = JSON.parse(this.responseText);
 		shown_questions.push(parseInt(data.question_id));
 		document.querySelector("#question_counter").dataset.count = shown_questions.length;
 		insertQuestion(data);

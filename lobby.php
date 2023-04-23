@@ -49,7 +49,6 @@ function share(){
 				Rozpocznij grę
 			</div>
 			<?php
-			$vertical_padding = 'class="padding-vertical-2x"';
 			echo '<div id="game-id">ID gry:<br /><b>'.$game_id.'</b></div>';
 			?>
 		</div>
@@ -117,10 +116,11 @@ function share(){
 				Poczekaj, aż host wybierze kategorie i rozpocznie grę.
 			</div>
 		</div>
+	</div>
 	<?php endif; ?>
 
 	<div id="quiz_game_container" class="shadow-overlay hidden">
-		<div <?=$vertical_padding?>>
+		<div class="padding-vertical-2x">
 			<div id="question_box" class="box col-md-9">
 				<div class="row">
 					<div id="question_counter" data-count="1"></div>
@@ -146,7 +146,6 @@ function share(){
 	</div>
 
 	<?php
-	if(isset($_POST['connect'])){ echo '</div>'; }
 	if(isset($_POST['host'])){
 		$role = 'host';
 		$nick = htmlspecialchars($_POST['nick']);

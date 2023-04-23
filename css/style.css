@@ -49,7 +49,7 @@ cursor:default;
 
 #player-list{
 list-style:none;
-padding:25px 0px;
+padding:25px 0;
 }
 
 #player-list li{
@@ -92,7 +92,7 @@ outline:none;
 .main-menu .button:hover{ opacity:0.8;transition:opacity 0.2s; }
 
 .form_input{
-	padding:0px 0px 10px 0px;
+	padding:0 0 10px 0;
 	position:relative;
 }
 
@@ -130,7 +130,7 @@ transition:0.2s ease all;
 }
 
 .form_input input:focus ~ label, .form_input input:valid ~ label, .form_input textarea:focus ~ label, .form_input textarea:valid ~ label{
-	top:0px;
+	top:0;
 	font-size:12px;
 	color:#333;
 }
@@ -142,7 +142,7 @@ color:#FFF;
 float:right;
 margin:10px 15px;
 line-height: 25px;
-text-shadow: 0px 0px 2px rgb(3, 169, 244), 0px 0px 2px rgb(3, 169, 244), 0px 0px 2px rgb(3, 169, 244), 0px 0px 2px rgb(3, 169, 244);
+text-shadow: 0 0 2px rgb(3, 169, 244), 0 0 2px rgb(3, 169, 244), 0 0 2px rgb(3, 169, 244), 0 0 2px rgb(3, 169, 244);
 }
 
 .flat{
@@ -206,11 +206,11 @@ padding:10px;
 }
 
 .box-list{
-padding:15px 0px;
+padding:15px 0;
 }
 
 .box-list li{
-padding:15px 0px;
+padding:15px 0;
 list-style:none;
 position:relative;
 }
@@ -247,7 +247,7 @@ border-bottom:1px solid #CCC;
 }
 
 .material-icons{
-margin:0px 10px;
+margin:0 10px;
 font-size:20px;
 vertical-align:bottom;
 }
@@ -364,11 +364,11 @@ input[type=checkbox].material_checkbox ~ label:before{
 }
 #question_box:after {
     content: '';
-    right: 0px;
-    bottom: 0px;
+    right: 0;
+    bottom: 0;
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     background-color:#FFF;
     -webkit-transform: rotateY( 180deg );
     -webkit-transform-style: preserve-3d;
@@ -471,8 +471,8 @@ pointer-events:none;
 
 #question_counter{
 position: absolute;
-left: 0px;
-top: 0px;
+left: 0;
+top: 0;
 color: #FFF;
 }
 
@@ -499,7 +499,7 @@ font-size: 20px;
 	margin-bottom: 50px;
 	height: calc(100vh - 100px);
     position: absolute;
-	top: 0px;
+	top: 0;
 	left:0;right:0;
 }
 
@@ -579,8 +579,8 @@ transition:top 0.5s;
 
 @media screen and (max-width: 992px) {
 	#score-table{ 
-		margin-top: 0px;
-		margin-bottom: 0px;
+		margin-top: 0;
+		margin-bottom: 0;
 		height: 100vh;
 	}
 	
@@ -624,7 +624,7 @@ transition:top 0.5s;
 }
 /* ----- LABELS COLORS ----- */
 span[data-difficulty="1"] i, span[data-difficulty="2"] i, span[data-difficulty="3"] i
-{ font-size:10px;vertical-align:baseline;margin:0px; }
+{ font-size:10px;vertical-align:baseline;margin:0; }
 
 span[data-difficulty="1"]{ background-color:#4CAF50; }
 span[data-difficulty="2"]{ background-color:#FF9800; }
@@ -645,13 +645,13 @@ span[data-type="lang"]{ background-color:#03A9F4; }
 .report_bug a{
 	color:#FFF!important;
 	display:block;
-	padding:20px 0px;
+	padding:20px 0;
 }
 
 .report_bug i{
 	vertical-align:sub;
 	font-size:24px;
-	margin:0px;
+	margin:0;
 }
 
 .button-share{

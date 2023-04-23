@@ -174,14 +174,14 @@ function ajaxRequest(action, content, c_id=0, q_id=0, id=0){
 */
 if(view == 'answer'){
 	document.querySelector('#add-answer').onclick = function(){
-		var content = '';
-		var id = this.dataset.id;
+		let content = '';
+		let id = this.dataset.id;
 		ajaxRequest('addAnswer', content, 0, 0, id).then((data) => {
 			data = JSON.parse(data);
 			if(data.success == 1){
 				document.querySelector('#list-answer').insertAdjacentHTML('beforeend', '<li><input class="input-answer" data-id="'+data.thisId+'" value="" /><span><input type="radio" id="answer_'+data.thisId+'" class="correct_answer" name="correct_answer" value="'+data.thisId+'" /><label for="answer_'+data.thisId+'"></label></span></li>');
-				var element = document.querySelector('[data-id="'+data.thisId+'"]');
-				var element_radio = document.querySelector('[value="'+data.thisId+'"]');
+				let element = document.querySelector('[data-id="'+data.thisId+'"]');
+				let element_radio = document.querySelector('[value="'+data.thisId+'"]');
 				answerEditEvent(element);
 				answerEditCorrectEvent(element_radio);
 			}
@@ -189,8 +189,8 @@ if(view == 'answer'){
 	}
 
 	document.querySelector('.input-question').onchange = function(){
-		var content = this.value;
-		var id = this.dataset.id;
+		let content = this.value;
+		let id = this.dataset.id;
 		ajaxRequest('editQuestion', content, 0, 0, id).then((data) => {
 		
 		});
@@ -206,8 +206,8 @@ if(view == 'answer'){
 
 	function answerEditCorrectEvent(element){
 		element.onchange = function(){
-			var id = this.value;
-			var q_id = document.querySelector('#input-question').dataset.id;
+			let id = this.value;
+			let q_id = document.querySelector('#input-question').dataset.id;
 			ajaxRequest('editCorrectAnswer', id, 0, q_id, id).then((data) => {
 			
 			});
@@ -216,8 +216,8 @@ if(view == 'answer'){
 
 	function answerEditEvent(element){
 		element.onchange = function(){
-			var content = this.value;
-			var id = this.dataset.id;
+			let content = this.value;
+			let id = this.dataset.id;
 			ajaxRequest('editAnswer', content, 0, 0, id).then((data) => {
 			
 			});
@@ -230,7 +230,7 @@ if(view == 'answer'){
 */
 if(view == 'category'){
 	document.querySelector('#add-category').onclick = function(){ 
-		var content = prompt("Wpisz nazwę kategorii", "");
+		let content = prompt("Wpisz nazwę kategorii", "");
 		
 		if (content != null) {
 			ajaxRequest('addCategory', content, 0, 0, 0).then((data) => {
@@ -246,8 +246,8 @@ if(view == 'category'){
 */
 if(view == 'question'){
 	document.querySelector('#add-question').onclick = function(){ 
-		var content = prompt("Wpisz treść pytania", "");
-		var c_id = document.querySelector('#breadcrumbs').dataset.cid;
+		let content = prompt("Wpisz treść pytania", "");
+		let c_id = document.querySelector('#breadcrumbs').dataset.cid;
 		
 		if (content != null) {
 			ajaxRequest('addQuestion', content, c_id, 0, 0).then((data) => {
@@ -256,13 +256,13 @@ if(view == 'question'){
 		} 
 	};
 
-	var copyLink = document.querySelectorAll('.copy-question');
-	for (var i = 0; i < copyLink.length; i++) {
+	let copyLink = document.querySelectorAll('.copy-question');
+	for (let i = 0; i < copyLink.length; i++) {
 		copyLink[i].addEventListener('click', function(event) {
 			this.onclick = function(){
-			var content = prompt("Wpisz treść pytania", "");
-			var c_id = document.querySelector('#breadcrumbs').dataset.cid;
-			var q_id = this.dataset.qid;
+			let content = prompt("Wpisz treść pytania", "");
+			let c_id = document.querySelector('#breadcrumbs').dataset.cid;
+			let q_id = this.dataset.qid;
 
 			if (content != null) {
 				ajaxRequest('copyQuestion', content, c_id, q_id, 0).then((data) => {
